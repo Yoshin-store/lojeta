@@ -1,146 +1,298 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Loja Verde</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial; }
-    body { background: #0a0a0a; color: white; }
-
-    header {
-      background: #16a34a;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .banner {
-      background: linear-gradient(90deg, #14532d, #22c55e);
-      padding: 60px;
-      text-align: center;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 30px;
-    }
-
-    .card {
-      background: #18181b;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-    }
-
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    button {
-      background: #22c55e;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #18181b;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      width: 400px;
-    }
-
-    .qr {
-      width: 200px;
-      margin-top: 20px;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON STREET | Produtos Premium Gaming/Streetwear</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-<header>
-  Minha Loja Verde
-</header>
-
-<section class="banner">
-  <h1>Bem-vindo à Loja</h1>
-  <p>Compre via Pix ou Cartão</p>
-</section>
-
-<section class="products">
-  <div class="card">
-    <img src="https://via.placeholder.com/300" alt="produto">
-    <h2>Produto 1</h2>
-    <p>R$ 50,00</p>
-    <button onclick="openPayment('Produto 1', 50)">Comprar</button>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/300" alt="produto">
-    <h2>Produto 2</h2>
-    <p>R$ 100,00</p>
-    <button onclick="openPayment('Produto 2', 100)">Comprar</button>
-  </div>
-</section>
-
-<div class="modal" id="paymentModal">
-  <div class="modal-content">
-    <h2>Pagamento</h2>
-    <p id="productInfo"></p>
-
-    <button onclick="showPix()">Pix</button>
-    <button onclick="alert('Integre Mercado Pago ou Stripe aqui')">Cartão</button>
-
-    <div>
-      <img id="pixQr" class="qr" src="qrcode-pix.png" alt="QR Code Pix">
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loader">
+            <div class="neon-circle"></div>
+            <span>Carregando...</span>
+        </div>
     </div>
 
-    <br>
-    <button onclick="closeModal()">Fechar</button>
-  </div>
-</div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <span>NEON STREET</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#products" class="nav-link">Produtos</a></li>
+                <li><a href="#categories" class="nav-link">Categorias</a></li>
+                <li><a href="#contact" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar produtos...">
+                </div>
+                <div class="cart-icon" id="cartToggle">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-<script>
-  let currentPrice = 0;
+    <!-- Hero Banner -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="neon-text">STREET</span>
+                <span class="neon-text">PREMIUM</span>
+            </h1>
+            <p class="hero-subtitle">Gaming • Streetwear • Digital</p>
+            <div class="hero-buttons">
+                <button class="btn-primary btn-buy-now">Comprar Agora</button>
+                <button class="btn-secondary">Ver Coleção</button>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-  function openPayment(product, price) {
-    currentPrice = price;
-    document.getElementById('paymentModal').style.display = 'flex';
-    document.getElementById('productInfo').innerText = `${product} - R$ ${price.toFixed(2)}`;
-    document.getElementById('pixQr').style.display = 'none';
-  }
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2 class="section-title">Produtos Premium</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
 
-  function showPix() {
-    document.getElementById('pixQr').style.display = 'block';
-    alert(`Escaneie o QR Code para pagar R$ ${currentPrice.toFixed(2)}`);
-  }
+    <!-- Categories -->
+    <section id="categories" class="categories">
+        <div class="container">
+            <h2 class="section-title">Categorias</h2>
+            <div class="categories-grid">
+                <div class="category-card" data-category="gaming">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Gaming</h3>
+                </div>
+                <div class="category-card" data-category="streetwear">
+                    <i class="fas fa-tshirt"></i>
+                    <h3>Streetwear</h3>
+                </div>
+                <div class="category-card" data-category="digital">
+                    <i class="fas fa-download"></i>
+                    <h3>Digital</h3>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  function closeModal() {
-    document.getElementById('paymentModal').style.display = 'none';
-  }
-</script>
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">O que dizem nossos clientes</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    "Melhor loja que já comprei! Entrega instantânea dos digitais 🔥"
+                    <div class="author">- João Silva</div>
+                </div>
+                <div class="testimonial">
+                    "Qualidade premium, design insano. Recomendo demais!"
+                    <div class="author">- Maria Santos</div>
+                </div>
+                <div class="testimonial">
+                    "PIX instantâneo e produtos incríveis. 10/10!"
+                    <div class="author">- Pedro Costa</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-bolt"></i>
+                        <span>NEON STREET</span>
+                    </div>
+                    <p>Produtos premium para gamers e streetwear lovers.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <a href="#home">Home</a>
+                    <a href="#products">Produtos</a>
+                    <a href="#categories">Categorias</a>
+                    <a href="#contact">Contato</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-whatsapp"></i> (11) 99999-9999</p>
+                    <p><i class="fas fa-envelope"></i> contato@neonstreet.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 NEON STREET. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Seu Carrinho</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p>Carrinho vazio</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button class="btn-primary checkout-btn">Finalizar Compra</button>
+            <div class="coupon-section">
+                <input type="text" placeholder="Cupom de desconto" id="couponInput">
+                <button onclick="applyCoupon()">Aplicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalProductName"></h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="modalProductImage" src="" alt="">
+                <div class="product-details">
+                    <div class="price" id="modalProductPrice"></div>
+                    <div class="quantity-selector">
+                        <label>Quantidade:</label>
+                        <div class="quantity-controls">
+                            <button onclick="changeQuantity(-1)">-</button>
+                            <input type="number" id="quantityInput" value="1" min="1">
+                            <button onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="total-price">
+                        <strong>Total: <span id="modalTotal">R$ 0,00</span></strong>
+                    </div>
+                    <button class="btn-primary buy-now-btn" onclick="openCheckout()">Comprar Agora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h2>Finalizar Compra</h2>
+                <button class="close-checkout" id="closeCheckout">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="checkout-body">
+                <div class="order-summary">
+                    <h3>Resumo do Pedido</h3>
+                    <div class="order-item">
+                        <img id="checkoutProductImage" src="" alt="">
+                        <div>
+                            <h4 id="checkoutProductName"></h4>
+                            <p id="checkoutProductPrice"></p>
+                        </div>
+                        <div class="quantity">x <span id="checkoutQuantity">1</span></div>
+                    </div>
+                    <div class="order-total">
+                        <strong>Total: <span id="checkoutTotal">R$ 0,00</span></strong>
+                    </div>
+                </div>
+                <div class="payment-methods">
+                    <h3>Método de Pagamento</h3>
+                    <div class="payment-option active" data-method="pix">
+                        <i class="fab fa-pix"></i>
+                        <span>PIX (Instantâneo)</span>
+                    </div>
+                    <div class="payment-option" data-method="card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Cartão de Crédito/Débito</span>
+                    </div>
+                    <div class="payment-option" data-method="boleto">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Boleto (Em breve)</span>
+                    </div>
+                </div>
+                <div class="payment-form" id="pixForm">
+                    <div class="qr-code-container">
+                        <canvas id="qrCode"></canvas>
+                        <p>Copie a chave PIX ou escaneie o QR Code</p>
+                    </div>
+                    <div class="pix-key">
+                        <input type="text" id="pixKey" readonly value="12345678-90.12.345678-9 contato@neonstreet.com">
+                        <button onclick="copyPixKey()">Copiar Chave</button>
+                    </div>
+                    <button class="btn-primary confirm-payment">Confirmar Pagamento</button>
+                </div>
+                <div class="payment-form hidden" id="cardForm">
+                    <div class="form-group">
+                        <label>Número do Cartão</label>
+                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Validade</label>
+                            <input type="text" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome no Cartão</label>
+                        <input type="text" placeholder="Nome Completo">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF</label>
+                        <input type="text" placeholder="000.000.000-00" maxlength="14">
+                    </div>
+                    <button class="btn-primary confirm-payment">Pagar com Cartão</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <i class="fas fa-check-circle"></i>
+            <h2>Compra realizada com sucesso!</h2>
+            <p>Obrigado pela sua compra. Você receberá os detalhes por email.</p>
+            <button class="btn-primary" onclick="closeSuccess()">Continuar Comprando</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
