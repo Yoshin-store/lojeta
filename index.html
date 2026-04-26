@@ -1,0 +1,117 @@
+import React, { useState } from 'react';
+import { ShoppingCart, CreditCard, QrCode, Package } from 'lucide-react';
+
+const products = [
+  {
+    id: 1,
+    name: 'Produto Exemplo 1',
+    price: 49.90,
+    image: 'https://via.placeholder.com/300x300',
+    description: 'Descrição do produto'
+  },
+  {
+    id: 2,
+    name: 'Produto Exemplo 2',
+    price: 99.90,
+    image: 'https://via.placeholder.com/300x300',
+    description: 'Descrição do produto'
+  }
+];
+
+export default function Store() {
+  const [cart, setCart] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="bg-green-600 p-5 flex justify-between items-center shadow-lg">
+        <h1 className="text-2xl font-bold">Minha Loja</h1>
+        <div className="flex items-center gap-2">
+          <ShoppingCart />
+          <span>{cart.length}</span>
+        </div>
+      </header>
+
+      {/* Banner */}
+      <section className="text-center py-16 bg-gradient-to-r from-green-900 to-green-500">
+        <h2 className="text-4xl font-bold">Bem-vindo à Loja</h2>
+        <p className="mt-3 text-gray-200">Escolha seus produtos e pague via Pix ou Cartão</p>
+      </section>
+
+      {/* Produtos */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+        {products.map((product) => (
+          <div key={product.id} className="bg-zinc-900 rounded-2xl p-4 shadow-lg">
+            <img src={product.image} alt={product.name} className="rounded-xl mb-3" />
+            <h3 className="text-xl font-bold">{product.name}</h3>
+            <p className="text-green-400 font-semibold">R$ {product.price.toFixed(2)}</p>
+            <button
+              onClick={() => setSelectedProduct(product)}
+              className="mt-4 bg-green-500 px-4 py-2 rounded-xl w-full"
+            >
+              Comprar
+            </button>
+          </div>
+        ))}
+      </section>
+
+      {/* Modal de pagamento */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+          <div className="bg-zinc-900 p-6 rounded-2xl w-96">
+            <h2 className="text-2xl font-bold mb-4">Pagamento</h2>
+            <p>{selectedProduct.name}</p>
+            <p className="text-green-400 mb-4">R$ {selectedProduct.price.toFixed(2)}</p>
+
+            <div className="flex gap-3 mb-4">
+              <button
+                onClick={() => setPaymentMethod('pix')}
+                className="bg-green-500 px-4 py-2 rounded-lg flex items-center gap-2"
+              >
+                <QrCode size={18}/> Pix
+              </button>
+
+              <button
+                onClick={() => setPaymentMethod('cartao')}
+                className="bg-blue-500 px-4 py-2 rounded-lg flex items-center gap-2"
+              >
+                <CreditCard size={18}/> Cartão
+              </button>
+            </div>
+
+            {paymentMethod === 'pix' && (
+              <div className="text-center">
+                <img
+                  src="https://via.placeholder.com/200x200?text=QR+PIX"
+                  alt="QR Pix"
+                  className="mx-auto rounded-lg"
+                />
+                <p className="mt-2">Escaneie o QR Code para pagar R$ {selectedProduct.price.toFixed(2)}</p>
+              </div>
+            )}
+
+            {paymentMethod === 'cartao' && (
+              <p className="text-gray-300">Integre Mercado Pago / Stripe aqui.</p>
+            )}
+
+            <button
+              onClick={() => {
+                setSelectedProduct(null);
+                setPaymentMethod('');
+              }}
+              className="mt-4 w-full bg-red-500 py-2 rounded-lg"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
